@@ -1,54 +1,52 @@
 using UnityEngine;
 
-public class TableTennisBall : MonoBehaviour
+public class PingPongBall : MonoBehaviour
 {
-    public float initialSpeed = 5f; // Initial speed of the ball
-    public float speedIncreaseFactor = 1.05f; // Factor by which speed increases after each hit
-    public float maxSpeed = 10f; // Maximum speed of the ball
-    public float spinFactor = 0.5f; // Factor for applying spin to the ball
-    public float gravityMultiplier = 2f; // Multiplier for gravity, to make the ball fall more realistically
-
-    public Vector3 direction; // Direction of the ball's initial movement
-
+    // Rigidbody component of the ball
     private Rigidbody rb;
-    private Vector3 lastVelocity;
 
+    // Start is called before the first frame update
     void Start()
     {
+        // Get the Rigidbody component attached to the ball
         rb = GetComponent<Rigidbody>();
-        // Start the ball moving in the specified direction with the initial speed
-        rb.velocity = direction.normalized * initialSpeed;
-        // Increase gravity for a more realistic ball behavior
-        Physics.gravity *= gravityMultiplier;
+
+        // Set mass and drag to simulate a ping pong ball
+        rb.mass = 0.5f; // Mass of a standard ping pong ball in kilograms
+        rb.drag = 0.41f; // Air resistance
+        rb.angularDrag = 0.1f; // Angular air resistance
+
+        // Set the ball's bounciness to simulate the elasticity of a ping pong ball
+        GetComponent<Collider>().material.bounciness = 1f;
+
+        // Serve the ball when the game starts
+        ServeBall();
     }
 
-    void FixedUpdate()
+    // Method to serve the ball
+    public void ServeBall()
     {
-        // Save the current velocity to calculate spin
-        lastVelocity = rb.velocity;
+        // Reset the ball's position
+        transform.position = Vector3.zero;
+
+        // Reset the ball's velocity
+        rb.velocity = Vector3.zero;
+
+        // Apply a force to serve the ball
+        rb.AddForce(new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f)).normalized * 2f, ForceMode.Impulse);
     }
 
-    void OnCollisionEnter(Collision collision)
+    // OnCollisionEnter is called when the ball collides with another collider
+    private void OnCollisionEnter(Collision collision)
     {
-        // Check if the collision is with the paddle
-        if (collision.gameObject.CompareTag("UserPaddle"))
-        {
-            // Calculate the direction of the ball's bounce
-            Vector3 normal = collision.contacts[0].normal;
-            Vector3 newDirection = Vector3.Reflect(lastVelocity.normalized, normal).normalized;
+        // Play a sound or apply any other effects here when the ball collides with something
+        // For example, you could play a bounce sound or spawn particle effects
 
-            // Increase speed
-            if (rb.velocity.magnitude < maxSpeed)
-            {
-                rb.velocity *= speedIncreaseFactor;
-            }
+        // If you want the ball to bounce off other colliders, you can add a bounce force
+        // Calculate the reflection direction
+        Vector3 reflectionDirection = Vector3.Reflect(rb.velocity.normalized, collision.contacts[0].normal);
 
-            // Apply spin
-            Vector3 spin = Vector3.Cross(rb.velocity, normal).normalized * spinFactor;
-            rb.angularVelocity = spin;
-
-            // Apply the new direction
-            rb.velocity = newDirection * rb.velocity.magnitude;
-        }
+        // Apply the reflection direction as the new velocity
+        rb.velocity = reflectionDirection * rb.velocity.magnitude;
     }
 }
