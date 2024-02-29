@@ -35,6 +35,7 @@ public class HandPresencePhysics : MonoBehaviour
 
         //position
         rb.velocity = (target.position - transform.position) / Time.fixedDeltaTime;
+
         //rotation
         Quaternion rotationDifference = target.rotation * Quaternion.Inverse(transform.rotation);
         rotationDifference.ToAngleAxis(out float angleInDegree, out Vector3 rotationAxis);

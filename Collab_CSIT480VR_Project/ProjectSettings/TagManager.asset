@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - UserPaddle
+  - Target
+  - Ball
+  - Wall
   layers:
   - Default
   - TransparentFX
@@ -20,9 +23,9 @@ TagManager:
   - TennisStadium
   - GrabLayer
   - VRBody1
-  - 
-  - 
-  - 
+  - Bow
+  - Arrow
+  - TableTennisTable
   - 
   - 
   - 

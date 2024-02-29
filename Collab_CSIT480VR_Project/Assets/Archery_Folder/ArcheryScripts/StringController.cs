@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class StringController : MonoBehaviour
@@ -18,6 +19,11 @@ public class StringController : MonoBehaviour
 
     private Transform interactor;
 
+    private float strength;
+
+    public UnityEvent OnBowPulled;
+    public UnityEvent<float> OnBowReleased;
+
     private void Awake()
     {
         interactable = midPointGrabObject.GetComponent<XRGrabInteractable>();
@@ -31,6 +37,9 @@ public class StringController : MonoBehaviour
 
     private void ResetBowString(SelectExitEventArgs arg0)
     {
+        OnBowReleased?.Invoke(strength);
+        strength = 0;
+
         interactor = null;
         midPointGrabObject.localPosition = Vector3.zero;
         midPointVisualObject.localPosition = Vector3.zero;
@@ -40,6 +49,7 @@ public class StringController : MonoBehaviour
     private void PrepareBowString(SelectEnterEventArgs arg0)
     {
         interactor = arg0.interactorObject.transform;
+        OnBowPulled?.Invoke();
     }
 
     private void Update()
@@ -62,6 +72,7 @@ public class StringController : MonoBehaviour
     {
         if (midPointLocalSpace.z >= 0)
         {
+            strength = 0;
             midPointVisualObject.localPosition = Vector3.zero;
         }
     }
@@ -70,6 +81,7 @@ public class StringController : MonoBehaviour
     {
         if (midPointLocalSpace.z < 0 && midPointLocalZAbs >= bowStringStretchLimit)
         {
+            strength = 1;
             midPointVisualObject.localPosition = new Vector3(0, 0, -bowStringStretchLimit);
         }
     }
@@ -78,7 +90,13 @@ public class StringController : MonoBehaviour
     {
         if (midPointLocalSpace.z < 0 && midPointLocalZAbs < bowStringStretchLimit)
         {
+            strength = Remap(midPointLocalZAbs, 0, bowStringStretchLimit, 0, 1);
             midPointVisualObject.localPosition = new Vector3(0, 0, midPointLocalSpace.z);
         }
+    }
+
+    private float Remap(float value, int fromMin, float fromMax, int toMin, int toMax)
+    {
+        return (value - fromMin) / (fromMax - fromMin) * (toMax - toMin) + toMin;
     }
 }
