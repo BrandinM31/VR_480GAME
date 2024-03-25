@@ -21,6 +21,10 @@ EditorBuildSettings:
     path: Assets/tabletennisVRscene.unity
     guid: 549c2305cb70ded4aaadb51b38dabaf5
   m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 7345ed62a54c6b2419ec984f816f24e2,
+      type: 2}
+    Unity.XR.OpenVR.Settings: {fileID: 11400000, guid: a1a2d117e3f91a24fbf74d333c97333d,
+      type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: bf9742313bb39e144bd3fe75c1f4c40d,
       type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: fabdfdbec74513f4aab94971a32e373f,

@@ -91,6 +91,11 @@ MonoBehaviour:
   myCollider: {fileID: 3992669261174938695}
   stickingArrow: {fileID: 1950691084506539145, guid: 3dd351f105a1d0841a70c1c131d8d03e,
     type: 3}
+  score1: 10
+  score2: 4
+  score3: 3
+  score4: 2
+  score5: 1
 --- !u!1001 &3375860564186460225
 PrefabInstance:
   m_ObjectHideFlags: 0

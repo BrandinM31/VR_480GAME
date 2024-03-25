@@ -8,6 +8,9 @@ TagManager:
   - Target
   - Ball
   - Wall
+  - TableTennisFloor
+  - out
+  - postProcessing
   layers:
   - Default
   - TransparentFX
@@ -26,8 +29,8 @@ TagManager:
   - Bow
   - Arrow
   - TableTennisTable
-  - 
-  - 
+  - TableTennisBarrier
+  - PostProcessing
   - 
   - 
   - 

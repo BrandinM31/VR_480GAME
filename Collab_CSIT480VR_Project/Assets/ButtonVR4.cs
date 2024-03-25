@@ -49,7 +49,7 @@ public class ButtonVR4 : MonoBehaviour
         sound.Play(); // Play the sound after the fade out effect
 
         // Load the scene after fading out
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(4);
     }
 
     IEnumerator FadeOut()

@@ -24,9 +24,12 @@ public class StringController : MonoBehaviour
     public UnityEvent OnBowPulled;
     public UnityEvent<float> OnBowReleased;
 
+    public ArrowController arrowController;
+
     private void Awake()
     {
         interactable = midPointGrabObject.GetComponent<XRGrabInteractable>();
+        arrowController = GetComponent<ArrowController>();
     }
 
     private void Start()
@@ -39,7 +42,7 @@ public class StringController : MonoBehaviour
     {
         OnBowReleased?.Invoke(strength);
         strength = 0;
-
+        
         interactor = null;
         midPointGrabObject.localPosition = Vector3.zero;
         midPointVisualObject.localPosition = Vector3.zero;
@@ -65,6 +68,14 @@ public class StringController : MonoBehaviour
             HandlePullingString(midPointLocalZAbs, midPointLocalSpace);
 
             bowStringRenderer.CreateString(midPointVisualObject.position);
+        }
+
+        if (arrowController.arrowCount < 1)
+        {
+            interactable.enabled = false;
+        } else
+        {
+            interactable.enabled = true;
         }
     }
 
