@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
 {
     public Transform aimTarget; // the target where we aim to land the ball
     float speed = 32;//move speed
-    //float force = 4; // ball impact force
+  
     bool hitting; // boolea5n to know if we are hitting the ball or not 
     public Transform ball; // the ball 
     Animator animator; //refrence to the animator for use 
@@ -32,7 +32,6 @@ public class Player : MonoBehaviour
         currentShot = shotManager.topSpin;
 
     }
-
     void Update()
     {
         float h = Input.GetAxisRaw("Horizontal"); // get the horizontal axis of the keyboard
