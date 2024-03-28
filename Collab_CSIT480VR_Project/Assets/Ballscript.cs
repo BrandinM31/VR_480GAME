@@ -5,12 +5,18 @@ using UnityEngine.UI;
 
 public class Ball : MonoBehaviour
 {
+
     Vector3 initialPos; // ball's initial position
     private AudioSource audioSource; // Change type to AudioSource
 
     //track who hits the ball. (BOT or human)
     public string hitter;
 
+    [SerializeField] Transform BotServeRight;
+    [SerializeField] Transform BotServeLeft;
+    [SerializeField] Transform PlayerserveRight;
+    [SerializeField] Transform PlayerserveLeft;
+    bool servedRight = true;
 
     //scoring
     int playerScore;
@@ -25,6 +31,7 @@ public class Ball : MonoBehaviour
 
     private void Start()
     {
+
         initialPos = transform.position; // default it to where we first place it in the scene
         audioSource = GetComponent<AudioSource>(); // Get the AudioSource component
         //Starting score
@@ -38,20 +45,24 @@ public class Ball : MonoBehaviour
         {
             GetComponent<Rigidbody>().velocity = Vector3.zero; // reset it's velocity to 0 so it doesn't move anymore
             transform.position = initialPos; // reset it's position 
-            
+
             GameObject.Find("UserPaddle").GetComponent<Player>().Reset(); //when the ball hits the "wall" it will call the reset function cretaed in the player script
             if (playing)
             {
                 if (hitter == "player") // if the player is the last person to hit the ball out then... 
                 {
                     botScore++;
+                    BotReset();
                 }
                 else if (hitter == "BOT") // if the player is the last person to hit the ball out then... 
                 {
                     playerScore++;
+                    PlayerReset();
                 }
                 playing = false;
+
                 updateScores();
+
             }
             else if (collision.transform.CompareTag("out") && collision.transform.CompareTag("Wall")) // if the ball hits a wall
             {
@@ -65,10 +76,12 @@ public class Ball : MonoBehaviour
                     if (hitter == "player") // if the player is the last person to hit the ball out then... 
                     {
                         botScore++;
+                        BotReset();
                     }
                     else if (hitter == "BOT") // if the player is the last person to hit the ball out then... 
                     {
                         playerScore++;
+                        PlayerReset();
                     }
                     playing = false;
                     updateScores();
@@ -86,16 +99,18 @@ public class Ball : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
-        if (other.CompareTag("out") && playing )
+        if (other.CompareTag("out") && playing)
         {
 
             if (hitter == "player") // if the player is the last person to hit the ball out then... 
             {
                 playerScore++;
+                PlayerReset();
             }
             else if (hitter == "BOT") // if the player is the last person to hit the ball out then... 
             {
                 botScore++;
+                BotReset();
             }
             playing = false;
             updateScores();
@@ -108,14 +123,64 @@ public class Ball : MonoBehaviour
     {
         playerScoreText.text = "player : " + playerScore;
         botScoreText.text = "BOT : " + botScore;
+
+        if (playerScore >= 2 || botScore >= 2)
+        {
+            gameOver();
+        }
     }
 
+    public void PlayerReset() // after each "out" there will be a reset of position
+    {
+        if (PlayerserveRight)
+            transform.position = PlayerserveLeft.position;
+        else
+            transform.position = PlayerserveRight.position;
+        servedRight = !servedRight;
+    }
+
+    public void BotReset() // after each "out" there will be a reset of position
+    {
+        if (BotServeRight)
+            transform.position = BotServeLeft.position;
+        else
+            transform.position = BotServeRight.position;
+        servedRight = !servedRight;
+    }
     public void gameOver()
     {
-        //Play trophy animation or loser animation
-        //Them
-        // Make UI come up for player options. Copy and paste UI from 
+        if (playerScore >= 2 || botScore >= 2)
+        {
+            gameObject.SetActive(false); // Hide the ball
+            GameObject canvas = GameObject.Find("scoringCanvas"); // Assuming the UI Text will be on a Canvas GameObject
 
+            if (canvas != null)
+            {
+                GameObject textPrefab = new GameObject("GameOverText");
+                textPrefab.transform.SetParent(canvas.transform, false);
 
+                Text gameOverText = textPrefab.AddComponent<Text>();
+                gameOverText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+                gameOverText.fontSize = 45;
+                gameOverText.alignment = TextAnchor.MiddleRight;
+                gameOverText.color = Color.red;
+                gameOverText.fontStyle = FontStyle.Bold;
+                gameOverText.horizontalOverflow = HorizontalWrapMode.Wrap;
+                gameOverText.verticalOverflow = VerticalWrapMode.Truncate;
+                if (playerScore >= 2)
+                {
+                    gameOverText.text = "YOU WIN";
+                }
+                else
+                {
+                    gameOverText.text = "YOU LOSE";
+                }
+            }
+            else
+            {
+                Debug.LogError("Canvas not found. Make sure you have a Canvas GameObject in your scene named 'Canvas'.");
+            }
+        }
     }
+
 }

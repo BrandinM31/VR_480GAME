@@ -122,7 +122,7 @@ Material:
     - _EnableFogOnTransparent: 1
     - _EnvironmentReflections: 1
     - _ExcludeFromTUAndAA: 0
-    - _Foam_scale: 27.04
+    - _Foam_scale: 143.34
     - _Foam_speed: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
@@ -176,8 +176,8 @@ Material:
     - _light_mask: 0.97
     - _light_scale: 86.39
     - _light_speed: 1.72
-    - _strength: 0.88
-    - _water_scale: 1.21
+    - _strength: 0.1
+    - _water_scale: 11
     - _wave_speed: 0.02
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}

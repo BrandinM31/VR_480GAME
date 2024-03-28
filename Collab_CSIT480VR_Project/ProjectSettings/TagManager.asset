@@ -11,6 +11,8 @@ TagManager:
   - TableTennisFloor
   - out
   - postProcessing
+  - Bot
+  - UIText
   layers:
   - Default
   - TransparentFX

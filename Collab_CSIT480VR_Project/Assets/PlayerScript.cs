@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     public Transform aimTarget; // the target where we aim to land the ball
     float speed = 32;//move speed
   
-    bool hitting; // boolea5n to know if we are hitting the ball or not 
+    bool hitting; // boolean to know if we are hitting the ball or not 
     public Transform ball; // the ball 
     Animator animator; //refrence to the animator for use 
     public XRController xrController;
