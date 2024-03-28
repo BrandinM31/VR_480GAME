@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class Ball : MonoBehaviour
 {
 
+    public int playerServeCount = 0; // Counter to keep track of player's serves
+    public int botServeCount = 0; // Counter to keep track of bot's serves
+
     Vector3 initialPos; // ball's initial position
     private AudioSource audioSource; // Change type to AudioSource
 
@@ -124,19 +127,42 @@ public class Ball : MonoBehaviour
         playerScoreText.text = "player : " + playerScore;
         botScoreText.text = "BOT : " + botScore;
 
-        if (playerScore >= 2 || botScore >= 2)
+        if (playerScore >= 12 || botScore >= 12)
         {
             gameOver();
         }
     }
 
+
+    public void ServeSequence()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            // Player serves
+            
+            playerServeCount++;
+            PlayerReset();
+            if (playerServeCount == 5)
+                break; // Exit the loop if the player has served three times
+
+            // Bot serves
+            
+            botServeCount++;
+            BotReset();
+            // Check if the bot has served three times
+            if (botServeCount == 5)
+                break; // Exit the loop if the bot has served three times
+        }
+        playerServeCount = 0;
+        botServeCount = 0;
+    }
     public void PlayerReset() // after each "out" there will be a reset of position
     {
         if (PlayerserveRight)
             transform.position = PlayerserveLeft.position;
         else
             transform.position = PlayerserveRight.position;
-        servedRight = !servedRight;
+        servedRight = false;
     }
 
     public void BotReset() // after each "out" there will be a reset of position
@@ -145,11 +171,12 @@ public class Ball : MonoBehaviour
             transform.position = BotServeLeft.position;
         else
             transform.position = BotServeRight.position;
-        servedRight = !servedRight;
+        servedRight = false;
     }
+
     public void gameOver()
     {
-        if (playerScore >= 2 || botScore >= 2)
+        if (playerScore >= 12 || botScore >= 12)
         {
             gameObject.SetActive(false); // Hide the ball
             GameObject canvas = GameObject.Find("scoringCanvas"); // Assuming the UI Text will be on a Canvas GameObject
@@ -161,13 +188,13 @@ public class Ball : MonoBehaviour
 
                 Text gameOverText = textPrefab.AddComponent<Text>();
                 gameOverText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-                gameOverText.fontSize = 45;
+                gameOverText.fontSize = 55;
                 gameOverText.alignment = TextAnchor.MiddleRight;
                 gameOverText.color = Color.red;
                 gameOverText.fontStyle = FontStyle.Bold;
                 gameOverText.horizontalOverflow = HorizontalWrapMode.Wrap;
                 gameOverText.verticalOverflow = VerticalWrapMode.Truncate;
-                if (playerScore >= 2)
+                if (playerScore >= 12)
                 {
                     gameOverText.text = "YOU WIN";
                 }
